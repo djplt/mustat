@@ -1,3 +1,3 @@
-from .api import init, searchArtistID, getArtistSongs, getArtistSongURLs, APIFormatError, APINearlyFound, APINotFound
+from .api import *
 
 init()
