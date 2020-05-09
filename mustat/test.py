@@ -3,6 +3,7 @@ import statistics
 from statistics import StatisticsError
 
 from artist import Artist
+from api import APINotFound
 
 class TestArtist(unittest.TestCase):
 
@@ -24,17 +25,20 @@ class TestArtist(unittest.TestCase):
 
   def test_api_song_mismatch(self):
     '''
-    Test case: Brainmusic API returns songs but the "lyrics" API returns 404.
+    Test case: Brainmusic API returns songs but the "lyrics" API returns 404 to "The Eagles".
     All artist song names return a 404 when searching under the lyrics API.
+    The "Artist" module will simply throw a common APINotFound exception if something has not been found during the
+    API download.
     '''
-    a = Artist("The Eagles", 5)
-    self.assertTrue(a.name, "The Eagles")
-    self.assertTrue(a.wordLengths == [])
+    exceptionRaised = False
+    try:
+      a = Artist("The Eagles", 5)
+      self.assertTrue(a.name, "The Eagles")
+      self.assertTrue(a.wordLengths == [])
+    except APINotFound:
+      exceptionRaised = True
 
-    #self.assertRaises(StatisticsError, a.averageWordLength)
-    #self.assertRaises(StatisticsError, a.stdevWordLength)
-    #self.assertRaises(StatisticsError, a.varianceWordLength)
-    
+    self.assertTrue(exceptionRaised)
 
 
 if __name__ == "__main__":

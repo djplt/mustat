@@ -25,10 +25,9 @@ def main(name, songs):
   except APINearlyFound as e:
     click.echo("Did you mean %s?" % e.args)
   except APINotFound:
-    click.echo("Could not find any entries under the artist name %s" % name)
+    click.echo("Could not find any artists or songs under the artist name '%s'" % name)
   except APIFormatError:
     click.echo("Unexpected API error")
   except Exception as e:
     click.echo("**** An unexpected error occured ****")
     raise e
-

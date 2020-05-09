@@ -1,6 +1,7 @@
 from statistics import mean, stdev, variance
+import timeit
 
-from api import api
+from api import api, APINotFound, getSongLyrics, getArtistSongs
 
 class Artist(object):
 
@@ -9,9 +10,10 @@ class Artist(object):
     Downloads an sets up an artist data structure.
     '''
     self.name, self.id = api.searchArtistID(name)
-    self.songs = api.getArtistSongs(self.id, maxSongs)
-    self.words = []
-    [self.words.extend(api.getSongLyrics(self.name, song)) for song in self.songs]
+    self.songs = getArtistSongs(self.id, maxSongs)
+    self.words = getSongLyrics(self.name, self.songs)
+    if self.words == []:
+      raise api.APINotFound
     self.wordLengths = [len(word) for word in self.words]
 
   @property

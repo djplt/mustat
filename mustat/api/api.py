@@ -2,6 +2,10 @@ import musicbrainzngs as mus
 import requests
 import json
 import re
+import asyncio
+import concurrent.futures
+import requests
+
 
 MinSearchScoreAccept = 99
 
@@ -54,17 +58,43 @@ def getArtistSongs(id: str, maxSongs: int = 500):
 
   return songs
 
-def getSongLyrics(artist: str, song: str):
+async def _getSongLyrics_async(URLs: str):
+  '''
+  Asynchronous internal function for performing a Get request on a list on URLs.
+  '''
+  with concurrent.futures.ThreadPoolExecutor(max_workers=1000) as executor:
+
+      loop = asyncio.get_event_loop()
+      futures = [
+          loop.run_in_executor(
+              executor, 
+              requests.get, 
+              URL
+          )
+          for URL in URLs ]
+      lyrics = []
+      for res in await asyncio.gather(*futures):
+          if res.ok and 'lyrics' in res.json():  # If the response is strange then just ignore this set of lyrics.
+            lyrics.extend(lyricFormat(res.json()['lyrics']))
+  return lyrics
+
+
+
+def getSongLyrics(artist: str, songs: str):
   '''
   Retrieves song lyrics based on artist name and song.
   Returns an empty array if response was unsucessful.
+  This is done asynchronously as tests reveal this to function to be the bottleneck.
+  E.g. Searching for the artist and getting the artist songs took ~2 seconds.
   '''
   lyrics = []
   URLBase = "https://api.lyrics.ovh/v1/{}/{}"
-  res = requests.get(URLBase.format(artist, song))
-  if res.ok:
-    body = res.json()['lyrics']
-    lyrics = lyricFormat(body)
+  URLs = [ 
+    URLBase.format(artist, song)
+    for song in songs
+  ]
+  loop = asyncio.get_event_loop()
+  lyrics = loop.run_until_complete(_getSongLyrics_async(URLs))
   
   return lyrics
 
@@ -80,6 +110,6 @@ def lyricFormat(lyrics: str):
 
   # See note above.
   lyrics = re.sub(r"['|`|´]", '', lyrics)
-  # Replace unwanted chars with whitespace and split by whitespace. E.g. one-two-three"
+  # Replace unwanted chars with whitespace and split by whitespace. E.g. one-two-three becomes ["one", "two", "three"]
   return re.sub(r'[-|.|,|?|!|"|(|)|{|}:|;]', ' ', lyrics).split()
 
