@@ -4,9 +4,11 @@ Music Statistics Application. A CLI to gather statistics about a given artist, s
 
 ## Prerequisites
 
-python3
-pip for python3
-virtualenv (optional)
+* python 3.5 or higher
+
+* pip (for python3)
+
+* virtualenv (optional)
 
 ### Getting Started
 
@@ -14,6 +16,20 @@ Clone the repository
 
 ```
 git clone https://github.com/djplt/mustat.git
+```
+
+Navigate into the root directory
+
+```
+cd mustat
+```
+
+Start & activate a virtual environment (optional)
+
+```
+python3 -m virtualenv venv
+
+source venv/bin/activate
 ```
 
 Install the python modules from the root directory
@@ -27,9 +43,13 @@ pip install -r requirements.txt
 Mustat - Music Statistics. CLI to program to generate statistics about music artists.
 
 Options:
+
   --name TEXT           The Artist name to perform statistics on.
+
   --songs INTEGER       Number of song lyrics to download
+
   --graph / --no-graph  Display a graphical output
+
   --help                Show this message and exit.
 
 #### Example Use Cases
@@ -64,7 +84,7 @@ python mustat --name "leonard cohen" --songs=20
 
 ## Running the tests
 
-From the root directory you can run all unit tests
+From the root directory you can run all unit and integration tests
 
 ```
 python -m unittest discover -v mustat

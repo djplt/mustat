@@ -6,7 +6,6 @@ import asyncio
 import concurrent.futures
 import requests
 
-
 MinSearchScoreAccept = 99
 
 class APIFormatError(Exception):
@@ -83,7 +82,7 @@ async def _getSongLyrics_async(URLs: str):
 def getSongLyrics(artist: str, songs: str):
   '''
   Retrieves song lyrics based on artist name and song.
-  Returns an empty array if response was unsucessful.
+  Returns an empty array if response was unsuccessful.
   This is done asynchronously as tests reveal this to function to be the bottleneck.
   E.g. Searching for the artist and getting the artist songs took ~2 seconds.
   '''
@@ -101,7 +100,7 @@ def getSongLyrics(artist: str, songs: str):
 def lyricFormat(lyrics: str):
   '''
   Formats a lyrics string into an array of words, by removing all non-word chars splitting by whitespace.
-  Note: Apostrophe's are simply removed from the count but not used as deliminators e.g. "can't not" will become 
+  Note: Apostrophe's are simply removed from the count but not used as a deliminator e.g. "can't not" will become 
         ["cant", "not"]
 
   TODO Consider removing all non char words - although may be a bit too brutal.

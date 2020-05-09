@@ -36,5 +36,5 @@ def main(name, songs, graph):
   except APIFormatError:
     click.echo("Unexpected API error")
   except Exception as e:
-    click.echo("**** An unexpected error occured ****")
+    click.echo("**** An unexpected error occurred ****")
     raise e
