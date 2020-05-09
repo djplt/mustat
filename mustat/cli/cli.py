@@ -2,7 +2,7 @@ import click
 import api
 from api import searchArtistID, APIFormatError, APINearlyFound, APINotFound
 from artist import Artist
-from plot import histogram
+from plot import histogram, wordBarPlot, show
 
 @click.command()
 @click.option('--name', prompt='Artist name',
@@ -29,6 +29,10 @@ def main(name, songs, graph):
     if graph:
       histogram(art.wordLengths, x_label="Word Lengths", y_label="Frequency",
                 title="{} Word Lengths".format(art.name))
+
+      wordBarPlot(art.words, x_label="Words", y_label="Frequency",
+                title="{}'s Top 10 Words".format(art.name))
+      show()
   except APINearlyFound as e:
     click.echo("Did you mean %s?" % e.args)
   except APINotFound:
