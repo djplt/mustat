@@ -108,6 +108,7 @@ def lyricFormat(lyrics: str):
   TODO Consider cases like "it's or Tom's"
   '''
 
+  lyrics = lyrics.lower()
   # See note above.
   lyrics = re.sub(r"['|`|´]", '', lyrics)
   # Replace unwanted chars with whitespace and split by whitespace. E.g. one-two-three becomes ["one", "two", "three"]

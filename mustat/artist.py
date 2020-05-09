@@ -1,4 +1,4 @@
-from statistics import mean, stdev, variance
+from statistics import mean, stdev, variance, mode
 import timeit
 
 from api import api, APINotFound, getSongLyrics, getArtistSongs
@@ -7,7 +7,7 @@ class Artist(object):
 
   def __init__(self, name: str, maxSongs: int = 500):
     '''
-    Downloads an sets up an artist data structure.
+    Downloads and sets up an artist statistics data.
     '''
     self.name, self.id = api.searchArtistID(name)
     self.songs = getArtistSongs(self.id, maxSongs)
@@ -28,4 +28,7 @@ class Artist(object):
   def varianceWordLength(self):
     return variance(self.wordLengths)
 
+  @property
+  def mostCommonword(self):
+    return mode(self.words)
 
