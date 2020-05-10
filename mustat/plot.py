@@ -8,7 +8,6 @@ from collections import Counter
 from heapq import nlargest
 from nltk.corpus import stopwords
 import nltk
-nltk.download('stopwords')
 
 def histogram(data, x_label = "", y_label = "", title = ""):
   bins = np.arange(0, max(data) + 1.5) - 0.5
@@ -21,6 +20,7 @@ def histogram(data, x_label = "", y_label = "", title = ""):
   plt.xlim(0, int(max(data)*1.1))
 
 def wordBarPlot(words, x_label = "", y_label = "", title = ""):
+  nltk.download('stopwords')
   _, ax = plt.subplots()
   ax.set_ylabel(y_label)
   ax.set_xlabel(x_label)

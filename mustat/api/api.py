@@ -100,16 +100,14 @@ def getSongLyrics(artist: str, songs: str):
 def lyricFormat(lyrics: str):
   '''
   Formats a lyrics string into an array of words, by removing all non-word chars splitting by whitespace.
-  Note: Apostrophe's are simply removed from the count but not used as a deliminator e.g. "can't not" will become 
-        ["cant", "not"]
+  Note: Apostrophes are classed as a letter in a word. E.g. "can't" is a word.
 
   TODO Consider removing all non char words - although may be a bit too brutal.
-  TODO Consider cases like "it's or Tom's"
   '''
 
   lyrics = lyrics.lower()
-  # See note above.
-  lyrics = re.sub(r"['|`|´]", '', lyrics)
+  # Sanitise the various apostrophes
+  lyrics = re.sub(r"['|`|´]", "'", lyrics)
   # Replace unwanted chars with whitespace and split by whitespace. E.g. one-two-three becomes ["one", "two", "three"]
   return re.sub(r'[-|.|,|?|!|"|(|)|{|}:|;]', ' ', lyrics).split()
 

@@ -57,9 +57,7 @@ class TestAPI(unittest.TestCase):
     for l in lyrics:
       for word in l:
         self.assertFalse(word == "")    # Should not contain empty words
-        self.assertTrue(word.isalnum()) # Only contains alpha-numeric chars.
-        # self.assertIsNotNone(regex.match(word))
-
+        self.assertIsNotNone(re.match("[a-zA-Z0-9']*$", word))
 
   def test_lyric_split_by_whitespace(self):
     '''
@@ -71,15 +69,38 @@ class TestAPI(unittest.TestCase):
     self.assertListEqual(output, ["dupa", "kupa", "lupa"])
     output = lyricFormat("dupa\nkupa\t\n\r\t   lupa")
 
-  def test_lyric_format_non_chars(self):
+  def test_lyric_format_apostrophe(self):
     '''
-    Test case: Test the util function to be able extract relevant words from the the lyrics string.
+    Test case: Test the util function to be able to sanitise apostrophes
     '''
     # Strange input but we should be able to handle it.
-    output = lyricFormat("dupa-kupa -, lupa")
-    self.assertListEqual(output, ["dupa", "kupa", "lupa"])
     output = lyricFormat("don't don`t don´t")
-    self.assertListEqual(output, ["dont", "dont", "dont"])
+    self.assertListEqual(output, ["don't", "don't", "don't"])
+
+  def test_lyric_ignore_punctuation(self):
+    '''
+    Test case: Test the util function to be able to ignore punctuation.
+    '''
+    # Strange input but we should be able to handle it.
+    output = lyricFormat('dupa!!kupa ?, - lupa"mupa')
+    self.assertListEqual(output, ["dupa", "kupa", "lupa", "mupa"])
+
+  def test_lyric_handle_numbers(self):
+    '''
+    Test case: Test the util function to be able to handle numbers.
+    '''
+    # Strange input but we should be able to handle it.
+    output = lyricFormat('26th,27th')
+    self.assertListEqual(output, ["26th", "27th"])
+
+  def test_lyric_lower_case(self):
+    '''
+    Test case: Test the util function to be able to convert to lower case.
+    '''
+    # Strange input but we should be able to handle it.
+    output = lyricFormat('DUPA KupA')
+    self.assertListEqual(output, ["dupa", "kupa"])
+
 
 
 
