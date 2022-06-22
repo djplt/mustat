@@ -12,7 +12,7 @@ matplotlib==3.2.1
 mccabe==0.6.1
 musicbrainzngs==0.7.1
 nltk==3.5
-numpy==1.18.4
+numpy==1.22.0
 pylint==2.5.2
 pyparsing==2.4.7
 python-dateutil==2.8.1
